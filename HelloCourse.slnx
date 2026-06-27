@@ -1,4 +1,6 @@
 <Solution>
-  <Project Path="Collections/Collections.csproj" />
+  <Project Path="Collections/Modifiers.csproj" />
+  <Project Path="Dictionery/Dictionery.csproj" />
+  <Project Path="HashSet/HashSet.csproj" />
   <Project Path="HelloCourse/HelloCourse.csproj" />
 </Solution>
