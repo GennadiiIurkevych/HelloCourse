@@ -1,124 +1,127 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+//﻿using System;
+//using System.Collections.Generic;
+//using System.Text;
 
-namespace HelloCourse
-{
-    class Block0
-    {
-        static int Add(int number, int addend)
-        {
-            return number + addend;
-        }
+//namespace HelloCourse
+//{
+//    class Block0
+//    {
+//        static int Add(int number, int addend)
+//        {
+//            return number + addend;
+//        }
 
-        static string Greet(string Name)
-        {
-            return Name;
-        }
+//        static string Greet(string Name)
+//        {
+//            return Name;
+//        }
 
-        internal class Person
-        {
-            public string Name;
-            public int Age;
+//        internal class Person
+//        {
+//            public string Name;
+//            public int Age;
 
-            public Person(string name, int age)
-            {
-                Name = name;
-                Age = age;
-            }
+//            public Person(string name, int age)
+//            {
+//                Name = name;
+//                Age = age;
+//            }
 
-            public void Introduce()
-            {
-                Console.WriteLine($"Hello, my name's {Name}, I'm {Age} years old");
-            }
-        }
+//            public void Introduce()
+//            {
+//                Console.WriteLine($"Hello, my name's {Name}, I'm {Age} years old");
+//            }
+//        }
 
-        static void Main()
-        {
-            //Завдання 1:
-            int num = 8;
-            Console.WriteLine(num);
+//        static void Main()
+//        {
+//            //Завдання 1:
+//            int num = 8;
+//            Console.WriteLine(num);
 
-            string word = "Welcome";
-            Console.WriteLine(word);
+//            string word = "Welcome";
+//            Console.WriteLine(word);
 
-            string name = "Alex";
-            Console.WriteLine(name);
+//            string name = "Alex";
+//            Console.WriteLine(name);
 
-            bool haveCat = false;
-            Console.WriteLine(haveCat);
+//            bool haveCat = false;
+//            Console.WriteLine(haveCat);
 
-            double numWithPoint = 12.56;
-            Console.WriteLine(numWithPoint);
+//            double numWithPoint = 12.56;
+//            Console.WriteLine(numWithPoint);
 
-            /*int number = null;  //Видається помилка, тому, що неможливо перетворити null у 'int' (або інший тип), оскільки це ненульований тип значення. 
-                                  //У C# типи поділяються на типи посилань та типи значень. 
-                                  //Типи посилань можуть вказувати на(порожньо / нічого).
-                                  //Типи значень, однак, зберігають свої дані безпосередньо і завжди повинні мати дійсне значення.*/
+//            /*int number = null;  //Видається помилка, тому, що неможливо перетворити null у 'int' (або інший тип), оскільки це ненульований тип значення. 
+//                                  //У C# типи поділяються на типи посилань та типи значень. 
+//                                  //Типи посилань можуть вказувати на(порожньо / нічого).
+//                                  //Типи значень, однак, зберігають свої дані безпосередньо і завжди повинні мати дійсне значення.*/
 
+//            //Але, якщо ми поставимо знак ? після оголошення типу даних, то ми можемо присвоїти null:
 
-            //Завдання 2:
+//            int? number = null;
 
-            //int userInput = Convert.ToInt32(Console.ReadLine());
-            int userInput = int.Parse(Console.ReadLine()); //ще один метод перетворення стрічки в числовий тип даних
+//            //Завдання 2:
 
-            Console.WriteLine("You input " + userInput);
+//            //int userInput = Convert.ToInt32(Console.ReadLine());
+//            int userInput = int.Parse(Console.ReadLine()); //ще один метод перетворення стрічки в числовий тип даних
 
-            if (userInput % 2 == 0)
-                Console.WriteLine("This is an even number");
-            else
-                Console.WriteLine("This is an odd number");
+//            Console.WriteLine("You input " + userInput);
 
-            for (int i = 1; i <= userInput; i++)
-            {
-                Console.WriteLine(i);
-            }
+//            if (userInput % 2 == 0)
+//                Console.WriteLine("This is an even number");
+//            else
+//                Console.WriteLine("This is an odd number");
 
-            int iter = 1;
+//            for (int i = 1; i <= userInput; i++)
+//            {
+//                Console.WriteLine(i);
+//            }
 
-            while (iter <= userInput)
-            {
-                Console.WriteLine(iter);
-                iter++;
-            }
+//            int iter = 1;
 
-            //Завдання 3:
-            int sum = Add(4, 8);
-            Console.WriteLine($"Total: {sum}");
+//            while (iter <= userInput)
+//            {
+//                Console.WriteLine(iter);
+//                iter++;
+//            }
 
-            string firstName = Greet("Gennadii");
-            Console.WriteLine(firstName);
+//            //Завдання 3:
+//            int sum = Add(4, 8);
+//            Console.WriteLine($"Total: {sum}");
 
-            //Завдання 4:
+//            string firstName = Greet("Gennadii");
+//            Console.WriteLine(firstName);
 
-            int[] numbers = { 4, 15, 7, 28, 3 };
+//            //Завдання 4:
 
-            int maxInt = 4;
+//            int[] numbers = { 4, 15, 7, 28, 3 };
 
-            for (int i = 1; i < numbers.Length; i++)
+//            int maxInt = 4;
 
-                if (maxInt < numbers[i])
+//            for (int i = 1; i < numbers.Length; i++)
 
-                    maxInt = numbers[i];
+//                if (maxInt < numbers[i])
 
-            Console.WriteLine(maxInt);
+//                    maxInt = numbers[i];
 
-            string[] List = { "John", "Alex", "July" };
+//            Console.WriteLine(maxInt);
 
-            foreach (string names in List)
+//            string[] List = { "John", "Alex", "July" };
 
-                Console.WriteLine(names);
+//            foreach (string names in List)
 
-            //Завдання 5:
+//                Console.WriteLine(names);
 
-            Person identPerson = new Person("Gennadii", 56);
-            identPerson.Introduce();
+//            //Завдання 5:
 
-            Person informPerson = new Person("Volodymyr", 24);
-            Person anotherPerson = new Person("Max", 30);
-            informPerson.Introduce();
-            anotherPerson.Introduce();
+//            Person identPerson = new Person("Gennadii", 56);
+//            identPerson.Introduce();
 
-        }
-    }
-}
+//            Person informPerson = new Person("Volodymyr", 24);
+//            Person anotherPerson = new Person("Max", 30);
+//            informPerson.Introduce();
+//            anotherPerson.Introduce();
+
+//        }
+//    }
+//}
