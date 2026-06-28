@@ -2,7 +2,6 @@
   <Project Path="Collections/Modifiers.csproj" />
   <Project Path="Dictionery/Dictionery.csproj" />
   <Project Path="Generic/Generic.csproj" />
-  <Project Path="GenericClass/GenericClass.csproj" />
   <Project Path="HashSet/HashSet.csproj" />
   <Project Path="HelloCourse/HelloCourse.csproj" />
 </Solution>
