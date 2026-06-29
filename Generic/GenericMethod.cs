@@ -2,7 +2,7 @@
 {
     internal class GenericMethod
     {
-        // Generic-метод Swapз, що міняє місцями два значення
+        // Generic-метод Swap, що міняє місцями два значення
         static void Swap<T>(ref T arg, ref T contrarg)
         {
             /*Чи потрібний цей блок?
