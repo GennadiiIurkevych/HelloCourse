@@ -1,14 +1,4 @@
-﻿//string[] people = { "Tom", "Bob", "Sam", "Tim", "Tomas", "Bill" };
-
-//var selectedPeople = from p in people where p.ToUpper().StartsWith("T") orderby p select p; //спосіб операторів запиту LINQ
-//var selectedPeople2 = people.Where(p => p.ToUpper().StartsWith("T")).OrderBy(p => p); //спосіб методів розширення LINQ
-
-//foreach (var person in selectedPeople)
-//    Console.WriteLine(person);
-//foreach (var person in selectedPeople2)
-//    Console.WriteLine(person);
-
-var students = new List<Student>
+﻿var students = new List<Student>
 {
     new("Олег", 85),
     new("Юля", 92),
@@ -16,22 +6,28 @@ var students = new List<Student>
     new("Аня", 92),
     new("Петро", 65),
 };
-foreach (var person in students)
+
+var selectedStudents = (from person in students where person.Grade > 80 select person).OrderBy(person => person.Grade).ThenBy(person => person.Name);
+foreach (var person in selectedStudents)
     Console.WriteLine($"{person.Name} - grade {person.Grade}");
+    Console.WriteLine("\n");
 
-var selectedStudents = from person in students where person.Grade > 80 select person;
+selectedStudents = (from student in students  select student).OrderByDescending(student => student.Grade).ThenBy(student => student.Name);
 foreach (var person in selectedStudents)
-    Console.WriteLine($"\n{person.Name} - grade {person.Grade}");
+    Console.WriteLine($"{person.Name} - grade {person.Grade}");
+    Console.WriteLine("\n");
 
-
-selectedStudents = (from student in students  select student).OrderByDescending(student => student.Grade); //ще треба посортувати за іменем
-foreach (var person in selectedStudents)
-    Console.WriteLine($"\n{person.Name} - grade {person.Grade}");
-
-var arithmeticMean = (from num in students select num.Grade).Sum()/students.Count; //ще треба перетворення типів
+var arithmeticMean = (from num in students select num.Grade).Sum()/students.Count;
     Console.WriteLine(arithmeticMean);
+    Console.WriteLine("\n");
 
-/* selectedStudents = (from best in students select best).Max(best => best.Grade);  // треба допрацювати
-Console.WriteLine($"\n{person.Name} - grade {person.Grade}"); */
+selectedStudents = (from person in students where person.Grade == students.Max(person => person.Grade) select person).OrderBy(student => student.Name); 
+foreach (var student in selectedStudents)
+    Console.WriteLine($"{student.Name} - grade {student.Grade}");
+    Console.WriteLine("\n");
 
-record Student(string Name, int Grade);
+var groupGrade = from student in students group student by student.Grade; //продовжую працювати над цим
+foreach (var person in selectedStudents)
+    Console.WriteLine(person.Grade);
+    Console.WriteLine("\n");
+public record Student(string Name, double Grade);
