@@ -2,6 +2,7 @@
   <Project Path="BlockLINQ/BlockLINQ.csproj" />
   <Project Path="Collections/Modifiers.csproj" />
   <Project Path="Dictionery/Dictionery.csproj" />
+  <Project Path="Dto/Dto.csproj" Id="dc11d94d-e91c-4e05-9f44-30a9b8398ac7" />
   <Project Path="Generic/Generic.csproj" />
   <Project Path="HashSet/HashSet.csproj" />
   <Project Path="HelloCourse/HelloCourse.csproj" />
