@@ -10,6 +10,7 @@
     new() { Id = 8,  Name = "Desk Lamp",   CategoryName = "Office",      PriceUsd = 24.99,  StockCount = 20, IsActive = true  },
 };
 
+
 var rawOrders = new List<RawOrder>
 {
     new() { OrderId = 101, CustomerId = 1, CustomerName = "Alice",   ProductIds = new() { 1, 3 },    Status = "shipped",   CreatedAt = new DateTime(2024, 1, 10) },
@@ -27,6 +28,7 @@ public class RawProduct
     public double PriceUsd { get; init; }
     public int StockCount { get; init; }
     public bool IsActive { get; init; }
+   
 }
 
 public class RawOrder
@@ -34,37 +36,53 @@ public class RawOrder
     public int OrderId { get; init; }
     public int CustomerId { get; init; }
     public string? CustomerName { get; init; }
-    public List<int>? ProductIds { get; init; }   // список Id продуктів у замовленні
-    public string? Status { get; init; }          // "pending", "shipped", "cancelled"
+    public List<int>? ProductIds { get; init; }       // список Id продуктів у замовленні
+    public string? Status { get; init; }                // "pending", "shipped", "cancelled"
     public DateTime CreatedAt { get; init; }
 }
 
-public class ProductDto
+public sealed class ProductDto
 {
     public int Id { get; init; }
-    public string? Name { get; init; }
-    public string? Category { get; init; }
+    public string Name { get; init; } = "";
+    public string Category { get; init; } = "";
     public decimal Price { get; init; }
     public int StockCount { get; init; }
-    public bool IsAvailable
-    {
-        get
-        {
-            if (IsActive && StockCount > 0)
-                return true;
-        }
-
-        init;  
-    }
+    public bool IsAvailable { get; init; }
 }
 
-public class OrderDto
+public sealed class OrderDto
 {
     public int OrderId { get; init; }
-    public string? CustomerName { get; init; }
+    public string CustomerName { get; init; } = "";
     public IReadOnlyList<int>? ProductIds { get; init; }
-    public enum Status<OrderStatus> ( не string) 
-    // CreatedAt — DateTime
+    public OrderStatus Status { get; init; }
+    public DateTime CreatedAt { get; init; }
 }
 
 public enum OrderStatus { Pending, Shipped, Cancelled }
+
+
+
+///*Task!*/
+
+//public class ProductDto
+//{
+//    // Id — int
+//    // Name — string (не nullable)
+//    // Category — string (не nullable)
+//    // Price — decimal (не double!)
+//    // StockCount — int
+//    // IsAvailable — bool  ← true тільки якщо IsActive == true І StockCount > 0
+//}
+
+//public class OrderDto
+//{
+//    // OrderId — int
+//    // CustomerName — string (не nullable)
+//    // ProductIds — IReadOnlyList<int>  ← не List!
+//    // Status — OrderStatus (enum, не string!)
+//    // CreatedAt — DateTime
+//}
+
+//public enum OrderStatus { Pending, Shipped, Cancelled }
