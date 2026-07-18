@@ -40,6 +40,9 @@
             Console.WriteLine(stack.Pop());
             Console.WriteLine(stack.Pop());
             Console.WriteLine(stack.IsEmpty);
+            Console.WriteLine();
+            Console.WriteLine(RawProduct.Deconstruct());
+
         }
     }
 }
