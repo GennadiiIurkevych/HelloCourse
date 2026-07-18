@@ -2,7 +2,14 @@
   <Project Path="BlockLINQ/BlockLINQ.csproj" />
   <Project Path="Collections/Modifiers.csproj" />
   <Project Path="Dictionery/Dictionery.csproj" />
+  <Project Path="Dto/Dto.csproj" Id="dc11d94d-e91c-4e05-9f44-30a9b8398ac7" />
   <Project Path="Generic/Generic.csproj" />
+  <Project Path="GenericNoulege/GenericNoulege.csproj" Id="cb9c49e3-508d-44b6-8f17-7c7d909b67dc" />
   <Project Path="HashSet/HashSet.csproj" />
   <Project Path="HelloCourse/HelloCourse.csproj" />
+  <Project Path="Interface/Interface.csproj" Id="24ff1b16-5415-41c9-9736-fea2d5e066b1" />
+  <Project Path="Polimorfism/Polimorfism.csproj" Id="b0b927c5-57aa-4b1f-ba2b-ad778e80c009" />
+  <Project Path="Presentation/Presentation.csproj" Id="b346a692-7fe0-41b1-b2eb-657f5d9f8026" />
+  <Project Path="Task/Task.csproj" Id="7ccf8c70-e185-445f-aa87-8994c427d7e2" />
+  <Project Path="Training/Training.csproj" Id="b93c35dc-5442-404c-907d-c8194cff9e69" />
 </Solution>
