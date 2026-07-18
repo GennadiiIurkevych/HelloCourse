@@ -48,6 +48,13 @@ namespace Dto
             public DateTime CreatedAt { get; init; }
         }
 
+        public enum OrderStatus
+        {
+            Pending,
+            Shipped,
+            Cancelled
+        }
+
         public sealed class ProductDto
         {
             public int Id { get; init; }
@@ -58,18 +65,11 @@ namespace Dto
             public bool IsAvailable { get; init; }
         }
 
-        public enum OrderStatus
-        {
-            Pending,
-            Shipped,
-            Cancelled
-        }
-
         public static class ProductMapper
         {
             public static ProductDto ToDto(RawProduct raw)
             {
-                if (raw.Name  == null && raw.CategoryName == null)
+                if (raw.Name == null)
 
                     Console.WriteLine("Unknown");
 
@@ -93,40 +93,6 @@ namespace Dto
             }
         }
 
-        //public static class OrderMapper
-        //{
-        //    public static OrderDto ToDto(RawOrder raw)
-        //    {
-        //        if (raw == null)
-        //            Console.WriteLine("Make the order!");
-
-        //        // Попробуем распарсить статус, по умолчанию — Pending
-        //        if (!Enum.TryParse<OrderStatus>(raw.Status ?? string.Empty, true, out var status))
-        //        {
-        //            status = OrderStatus.Pending;
-        //        }
-
-        //        return new OrderDto
-        //        {
-        //            OrderId = raw.OrderId,
-        //            CustomerName = raw.CustomerName ?? string.Empty,
-        //            ProductIds = raw.ProductIds?.AsReadOnly(),
-        //            Status = status,
-        //            CreatedAt = raw.CreatedAt
-        //        };
-        //    }
-
-        //    public static List<OrderDto> ToDtoList(List<RawOrder> raws)
-        //    {
-        //        if (raws == null)
-        //            throw new ArgumentNullException(nameof(raws));
-
-        //        return raws.Select(ToDto).ToList();
-        //    }
-        //}
-
-
-
         public sealed class OrderDto
         {
             public int OrderId { get; init; }
@@ -134,6 +100,44 @@ namespace Dto
             public IReadOnlyList<int>? ProductIds { get; init; }
             public OrderStatus Status { get; init; }
             public DateTime CreatedAt { get; init; }
+        }
+
+        public static class OrderMapper
+        {
+            public static OrderDto ToDto(RawOrder raw)
+            {
+                if (raw.CustomerName is null)
+                    Console.WriteLine("Unknown!");
+
+                return new OrderDto
+                {
+                    OrderId = raw.OrderId,
+                    CustomerName = raw.CustomerName ?? string.Empty,
+                    ProductIds = raw.ProductIds?.AsReadOnly(),
+                    Status = ParseStatus(raw.Status),
+                    CreatedAt = raw.CreatedAt
+                };
+            }
+
+            public static List<OrderDto> ToDtoList(List<RawOrder> raws)
+            {
+                if (raws == null)
+                    Console.WriteLine("Raws order list is null");
+
+                return raws.Select(ToDto).ToList();
+            }
+        }
+        private static OrderStatus ParseStatus(string status)
+        {
+            switch (status)
+            {
+                case "pending": return OrderStatus.Pending;
+                case "shipped": return OrderStatus.Shipped;
+                case "cancelled": return OrderStatus.Cancelled;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(status), $"Unknown status: {status}");
+            }
+
         }
 
         static void Main(string[] args)
@@ -149,24 +153,64 @@ namespace Dto
 
             Console.WriteLine("________________________________");
 
-            
+
 
             foreach (var p in selectedProduct)
             {
                 if (p.Category == "Electronics" && p.Price < 500)
 
-                Console.WriteLine($"{p.Id}, {p.Name}, {p.Category}, {p.Price}, {p.StockCount}, {p.IsAvailable}");
+                    Console.WriteLine($"{p.Id}, {p.Name}, {p.Category}, {p.Price}, {p.StockCount}, {p.IsAvailable}");
             }
 
+            Console.WriteLine("________________________________");
 
-            //var orders = OrderMapper.ToDtoList(rawOrders);
 
-            //Console.WriteLine("________________________________");
-            //var selectedProducts = from p in rawProducts select p;
-            //foreach (var product in selectedProducts)
-            //{
-            //    Console.WriteLine($"{product.Name}, {product.CategoryName}, {product.PriceUsd}, {product.StockCount}, {product.IsActive}");
-            //}
+            var selectedCategory = products.GroupBy(p => p.Category).ToDictionary(g => g.Key, g => g.Average(p => p.Price)); //.Average() - метод, що повертає середнє арифметичне 
+
+            foreach (var p in selectedCategory)
+            {
+                Console.WriteLine($"{p.Key}: {p.Value}");
+            }
+
+            Console.WriteLine("________________________________");
+
+
+            var selectedCategoryMax = products.GroupBy(p => p.Category).ToDictionary(g => g.Key, g => g.MaxBy(p => p.Price));
+
+            foreach (var p in selectedCategoryMax)
+            {
+                Console.WriteLine($"{p.Key}: {p.Value.Price}");
+            }
+
+            Console.WriteLine("________________________________");
+
+            var productsFalseCount = products.Count(p => !p.IsAvailable);
+
+            Console.WriteLine(productsFalseCount);
+
+            Console.WriteLine("********************************");
+
+            var orderList = OrderMapper.ToDtoList(rawOrders);
+
+            var selectedShipped = orderList.OrderBy(p => p.CreatedAt);
+
+            foreach (var item in selectedShipped)
+            {
+                if (item.Status == OrderStatus.Shipped)
+
+                    Console.WriteLine($"{item.OrderId} - {item.CustomerName} - {item.Status} - {item.CreatedAt}");
+            }
+
+            Console.WriteLine("********************************");
+
+            var selectedStatusCount = orderList.GroupBy(s => s.Status); 
+
+
+
+                //Console.WriteLine($"{s.Key}: {s.Value.Status}");
+                Console.WriteLine(selectedStatusCount);
+
+
         }
     }
 }
