@@ -26,11 +26,11 @@
 
 //        class MyOtherClass : IFirstInterface, ISecondInterface
 //        {
-//            void IFirstInterface.Action()
+//            public void IFirstInterface.Action()
 //            {
 //                Console.WriteLine("MyOtherClass: Action from IFirstInterface");
 //            }
-//            void ISecondInterface.Action()
+//            public void ISecondInterface.Action()
 //            {
 //                Console.WriteLine("MyOtherClass: Action from ISecondInterface");
 //            }
@@ -53,7 +53,7 @@
 
 //                Foo(myOtherClass);
 //                Bar(myOtherClass);
-
+                  
 //                Console.WriteLine("----------------");
 
 //                /* приклад через посилання*/

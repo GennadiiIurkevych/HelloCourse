@@ -6,26 +6,22 @@ namespace Interface
 {
     internal class DefaultInterfaceImplementation
     {
+
         public interface ILogger
         {
-            //public ILogger() 
+            //public ILogger()
             //{
-
+            //    Console.WriteLine("ILogger constructor");
             //}
 
             //int a;
 
             void Log(LogLevel logLevel, string message);
 
-            //void Foo()
-            //{
-            //    Console.WriteLine("Test");
-            //}
-
-            //void Bar()
-            //{
-            //    Console.WriteLine("Bar");
-            //}
+            void Bar()
+            {
+                Console.WriteLine("Bar");
+            }
 
             //int Sum(int a, int b)
             //{
@@ -35,9 +31,7 @@ namespace Interface
             {
                 Log(LogLevel.Error, message);
             }
-
         }
-
 
         public enum LogLevel
         {
@@ -50,13 +44,14 @@ namespace Interface
 
         public class ConsoleLogger : ILogger
         {
-            void ILogger.Log(LogLevel logLevel, string message)
+            public void Log(LogLevel logLevel, string message)
             {
-                switch(logLevel)
+
+                switch (logLevel)
                 {
                     case LogLevel.Debug:
                         Console.ForegroundColor = ConsoleColor.Green;
-                    break;
+                        break;
                     case LogLevel.Info:
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
@@ -68,16 +63,18 @@ namespace Interface
                         Console.ForegroundColor = ConsoleColor.Red;
                         break;
                 }
-                Console.WriteLine($"{DateTime.Now}: {message}");
+                Console.WriteLine($"{DateTime.Now}: { message }");
                 Console.ResetColor();
             }
+
         }
         class Program
         {
+
             static void Main(string[] args)
             {
                 ILogger consoleLogger = new ConsoleLogger();
-                //consoleLogger.Bar();
+                consoleLogger.Bar();
                 consoleLogger.Foo();
                 consoleLogger.Log(LogLevel.Debug, "some event");
                 consoleLogger.Log(LogLevel.Warning, "some warning");
