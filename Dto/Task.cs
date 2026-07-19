@@ -97,6 +97,7 @@ namespace Dto
         {
             public int OrderId { get; init; }
             public string CustomerName { get; init; } = "";
+            public int CustomerId { get; init; }
             public IReadOnlyList<int>? ProductIds { get; init; }
             public OrderStatus Status { get; init; }
             public DateTime CreatedAt { get; init; }
@@ -113,6 +114,7 @@ namespace Dto
                 {
                     OrderId = raw.OrderId,
                     CustomerName = raw.CustomerName ?? string.Empty,
+                    CustomerId = raw.CustomerId,
                     ProductIds = raw.ProductIds?.AsReadOnly(),
                     Status = ParseStatus(raw.Status),
                     CreatedAt = raw.CreatedAt
@@ -137,7 +139,6 @@ namespace Dto
                 default:
                     throw new ArgumentOutOfRangeException(nameof(status), $"Unknown status: {status}");
             }
-
         }
 
         static void Main(string[] args)
@@ -147,30 +148,21 @@ namespace Dto
             var selectedProduct = products.Where(p => p.IsAvailable == true).OrderBy(p => p.Price);
 
             foreach (var p in selectedProduct)
-            {
                 Console.WriteLine($"{p.Id}, {p.Name}, {p.Category}, {p.Price}, {p.StockCount}, {p.IsAvailable}");
-            }
 
             Console.WriteLine("________________________________");
-
-
 
             foreach (var p in selectedProduct)
-            {
                 if (p.Category == "Electronics" && p.Price < 500)
-
                     Console.WriteLine($"{p.Id}, {p.Name}, {p.Category}, {p.Price}, {p.StockCount}, {p.IsAvailable}");
-            }
 
             Console.WriteLine("________________________________");
-
 
             var selectedCategory = products.GroupBy(p => p.Category).ToDictionary(g => g.Key, g => g.Average(p => p.Price)); //.Average() - метод, що повертає середнє арифметичне 
 
             foreach (var p in selectedCategory)
-            {
                 Console.WriteLine($"{p.Key}: {p.Value}");
-            }
+
 
             Console.WriteLine("________________________________");
 
@@ -178,9 +170,8 @@ namespace Dto
             var selectedCategoryMax = products.GroupBy(p => p.Category).ToDictionary(g => g.Key, g => g.MaxBy(p => p.Price));
 
             foreach (var p in selectedCategoryMax)
-            {
                 Console.WriteLine($"{p.Key}: {p.Value.Price}");
-            }
+
 
             Console.WriteLine("________________________________");
 
@@ -195,22 +186,32 @@ namespace Dto
             var selectedShipped = orderList.OrderBy(p => p.CreatedAt);
 
             foreach (var item in selectedShipped)
-            {
                 if (item.Status == OrderStatus.Shipped)
-
                     Console.WriteLine($"{item.OrderId} - {item.CustomerName} - {item.Status} - {item.CreatedAt}");
-            }
+
 
             Console.WriteLine("********************************");
 
-            var selectedStatusCount = orderList.GroupBy(s => s.Status); 
+            var selectedStatusCount = orderList.GroupBy(s => s.Status).ToDictionary(g => g.Key, g => g.Count());
+                                   
+            foreach (var item in selectedStatusCount)
+                Console.WriteLine($"{item.Key}: {item.Value}");
 
+            Console.WriteLine("********************************");
 
+            var selectedProducrIds = orderList.Where(s => s.ProductIds.Contains(1) == true);
+            
+            foreach (var s in selectedProducrIds)
+                Console.WriteLine($"{s.CustomerName}: {s.OrderId}");
 
-                //Console.WriteLine($"{s.Key}: {s.Value.Status}");
-                Console.WriteLine(selectedStatusCount);
+            Console.WriteLine("********************************");
 
-
+            foreach (var p in orderList)
+                if(p.Status == OrderStatus.Cancelled)
+                Console.WriteLine($"{p.CustomerId}, {p.OrderId}, {p.CustomerName}");
         }
     }
 }
+
+
+
