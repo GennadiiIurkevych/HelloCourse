@@ -28,6 +28,65 @@ namespace Dto
             new() { OrderId = 105, CustomerId = 2, CustomerName = "Bob",     ProductIds = new() { 8 },       Status = "pending",   CreatedAt = new DateTime(2024, 3, 15) },
         };
 
+        public interface IDiscountStrategy
+        {
+            abstract decimal ApplyDiscount(decimal originalPrice);
+            string Description { get; }
+        }
+
+        public interface IShippingMethod
+        {
+            decimal Cost { get; }
+            int EstimatedDays { get; }
+            string Name { get; }
+        }
+
+        public sealed class NoDiscount : IDiscountStrategy
+        {
+            public decimal ApplyDiscount(decimal originalPrice)
+            {
+                return originalPrice;
+            }
+            public string Description => "No discount";
+        }
+
+        public sealed class PercentageDiscount : IDiscountStrategy
+        {
+            public decimal percent = 15m;
+
+            public PercentageDiscount(decimal percent)
+            {
+
+            }
+            public decimal ApplyDiscount(decimal originalPrice)
+            {
+                if (percent >= 0 && percent <= 100)
+                {
+                    return originalPrice - (originalPrice / 100 * percent);
+                }
+                throw new ArgumentOutOfRangeException("The discount is too much");
+            }
+            public string Description => $"{percent}% off";
+        }
+
+        public sealed class FixedAmountDiscount : IDiscountStrategy
+        {
+            public decimal amount = 10m;
+
+            public FixedAmountDiscount(decimal amount)
+            {
+
+            }
+            public decimal ApplyDiscount(decimal originalPrice)
+            {
+                if (originalPrice < amount)
+                {
+                    Console.WriteLine("The price can't be negative");
+                }
+                return originalPrice - amount;
+            }
+            public string Description => $"${amount} off";
+        }
         public class RawProduct
         {
             public int Id { get; init; }
@@ -91,6 +150,8 @@ namespace Dto
 
                 return raws.Select(ToDto).ToList();
             }
+
+
         }
 
         public sealed class OrderDto
@@ -146,7 +207,6 @@ namespace Dto
             var products = ProductMapper.ToDtoList(rawProducts);
 
             var selectedProduct = products.Where(p => p.IsAvailable == true).OrderBy(p => p.Price);
-
             foreach (var p in selectedProduct)
                 Console.WriteLine($"{p.Id}, {p.Name}, {p.Category}, {p.Price}, {p.StockCount}, {p.IsAvailable}");
 
@@ -163,20 +223,15 @@ namespace Dto
             foreach (var p in selectedCategory)
                 Console.WriteLine($"{p.Key}: {p.Value}");
 
-
             Console.WriteLine("________________________________");
 
-
             var selectedCategoryMax = products.GroupBy(p => p.Category).ToDictionary(g => g.Key, g => g.MaxBy(p => p.Price));
-
             foreach (var p in selectedCategoryMax)
                 Console.WriteLine($"{p.Key}: {p.Value.Price}");
-
 
             Console.WriteLine("________________________________");
 
             var productsFalseCount = products.Count(p => !p.IsAvailable);
-
             Console.WriteLine(productsFalseCount);
 
             Console.WriteLine("********************************");
@@ -184,23 +239,19 @@ namespace Dto
             var orderList = OrderMapper.ToDtoList(rawOrders);
 
             var selectedShipped = orderList.OrderBy(p => p.CreatedAt);
-
             foreach (var item in selectedShipped)
                 if (item.Status == OrderStatus.Shipped)
                     Console.WriteLine($"{item.OrderId} - {item.CustomerName} - {item.Status} - {item.CreatedAt}");
 
-
             Console.WriteLine("********************************");
 
             var selectedStatusCount = orderList.GroupBy(s => s.Status).ToDictionary(g => g.Key, g => g.Count());
-
             foreach (var item in selectedStatusCount)
                 Console.WriteLine($"{item.Key}: {item.Value}");
 
             Console.WriteLine("********************************");
 
             var selectedProducrIds = orderList.Where(s => s.ProductIds.Contains(1) == true);
-
             foreach (var s in selectedProducrIds)
                 Console.WriteLine($"{s.CustomerName}: {s.OrderId}");
 
@@ -209,9 +260,31 @@ namespace Dto
             foreach (var p in orderList)
                 if (p.Status == OrderStatus.Cancelled)
                     Console.WriteLine($"{p.CustomerId}, {p.OrderId}, {p.CustomerName}");
+
+            Console.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+
+            var originalPrice = ProductMapper.ToDtoList(rawProducts).ToDictionary(o => o.Name, o => o.Price);
+            foreach (var p in originalPrice)
+
+                Console.WriteLine($"Product Id: {p.Key} - Price: {p.Value}");
+
+            Console.WriteLine("################################");
+
+            NoDiscount noDiscount = new NoDiscount();
+
+            Console.WriteLine($"{noDiscount.ApplyDiscount(originalPrice["Phone"])}, Discount: {noDiscount.Description}");
+
+            Console.WriteLine("______________________");
+
+            var percentageDiscount = new PercentageDiscount(15m);
+
+            Console.WriteLine($"{Math.Round(percentageDiscount.ApplyDiscount(originalPrice["Phone"]), 2)}, Discount: {percentageDiscount.Description}");
+
+            Console.WriteLine("______________________");
+
+            var fixedAmountDiscount = new FixedAmountDiscount(10m);
+
+            Console.WriteLine($"{fixedAmountDiscount.ApplyDiscount(originalPrice["Phone"])}, Discount: {fixedAmountDiscount.Description}");
         }
     }
 }
-
-
-
