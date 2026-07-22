@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Block6InterfaceAndPolimorfism;
+using System.Numerics;
 
 
 namespace Block6InterfaceAndPolimorfism
@@ -76,5 +77,3 @@ namespace Block6InterfaceAndPolimorfism
 
     }
 }
-
-
