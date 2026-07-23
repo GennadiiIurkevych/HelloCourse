@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Dto
 {
@@ -87,6 +88,25 @@ namespace Dto
             }
             public string Description => $"${amount} off";
         }
+
+
+
+        public static class PriceCalculator
+        {
+            public static decimal CalculateFinalPrice(ProductDto product, IDiscountStrategy discount)
+            {
+                return discount.ApplyDiscount(product.Price);
+            }
+            public static void PrintReceipt(ProductDto product, IDiscountStrategy discount)
+            {
+                var finalPrice = CalculateFinalPrice(product, discount);
+                Console.WriteLine($"Product: {product.Name}, Original price: {product.Price}, Discount: {discount.Description}, Final price: {finalPrice}");
+            }
+        }
+
+
+
+
         public class RawProduct
         {
             public int Id { get; init; }
@@ -268,7 +288,7 @@ namespace Dto
 
                 Console.WriteLine($"Product Id: {p.Key} - Price: {p.Value}");
 
-            Console.WriteLine("################################");
+            Console.WriteLine("-----Task1 Block6-----");
 
             NoDiscount noDiscount = new NoDiscount();
 
@@ -285,6 +305,20 @@ namespace Dto
             var fixedAmountDiscount = new FixedAmountDiscount(10m);
 
             Console.WriteLine($"{fixedAmountDiscount.ApplyDiscount(originalPrice["Phone"])}, Discount: {fixedAmountDiscount.Description}");
+
+            Console.WriteLine("______________________");
+            Console.WriteLine("*****Task2 Block6*****");
+
+            IDiscountStrategy[] priceCalculator = { new NoDiscount(), new PercentageDiscount(15m), new FixedAmountDiscount(10m) };
+
+            foreach (var p in products)
+            {          
+                foreach(var calc in priceCalculator)
+                    PriceCalculator.PrintReceipt(p, calc);
+                Console.WriteLine();
+            }
+
+
         }
     }
 }
